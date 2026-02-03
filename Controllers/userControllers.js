@@ -9,56 +9,55 @@ async function handleAll(req, res) {
 
 //HandleContact POST Request
 async function handleContact(req, res) {
-  const username = req.body.name;
-  const useremail = req.body.email;
-  const usermessage = req.body.message;
+  const { name, email, message } = req.body;
+
+  if (!name || !email || !message) {
+    return res.status(400).json({ message: "All fields are required" });
+  }
 
   try {
-    // Save Data DB
-    try{
-       await contactsModel
-      .create({
-        name: username,
-        email: useremail,
-        message: usermessage,
-      })
-    }catch(e){
-      return res.status(500).json({message:"server [database] Error"});
-    }
-    
-    //Send Mail 
-    try{
-      await sendMail({ username, useremail, usermessage });
-      res.status(200).json({ message: "Request send successfully" });
-    }catch(e){
-      res.status(500).json({message:"Server [email sending] Error"});
-    }
-  } catch (e) {
-    res.status(500).json({message:"server error"});
-    console.log(e);
+    //  Save to DB
+    await contactsModel.create({
+      name,
+      email,
+      message,
+    });
+
+    // Send Email
+    sendMail({
+      username: name,
+      useremail: email,
+      usermessage: message,
+    });
+
+    //  ONE response only
+    return res.status(200).json({
+      message: "Request sent successfully",
+    });
+
+  } catch (error) {
+    console.error("Contact error:", error);
+    return res.status(500).json({
+      message: "Server error. Please try again later",
+    });
   }
 }
 
 //Handle POST Feedback Request
 async function handleFeedback(req, res) {
   try {
-    // console.log("Feedback Body:", req.body);
-    feedbacksModel
-      .create({
-        name: req.body.name,
-        rating: req.body.rating,
-        message: req.body.message,
-      })
-      .then(() => {
-        return res.status(201).json({
-          message: "success",
-        });
-      })
-      .catch(() => {
-        console.log("Not Created");
-      });
-  } catch (e) {
-    console.error("Error server side:", e);
+    await feedbacksModel.create({
+      name: req.body.name,
+      rating: req.body.rating,
+      message: req.body.feedback,
+    });
+
+    return res.status(201).json({
+      message: "Feedback submitted successfully",
+    });
+
+  } catch (error) {
+    console.error("Feedback error:", error);
     return res.status(500).json({
       message: "Server error",
     });
