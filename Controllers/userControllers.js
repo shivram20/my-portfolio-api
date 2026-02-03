@@ -23,18 +23,17 @@ async function handleContact(req, res) {
       message,
     });
 
-    // Send Email
-    sendMail({
-      username: name,
-      useremail: email,
-      usermessage: message,
-    });
-
     //  ONE response only
     return res.status(200).json({
       message: "Request sent successfully",
     });
 
+    // Send Email
+    await sendMail({
+      username: name,
+      useremail: email,
+      usermessage: message,
+    });
   } catch (error) {
     console.error("Contact error:", error);
     return res.status(500).json({
@@ -45,17 +44,19 @@ async function handleContact(req, res) {
 
 //Handle POST Feedback Request
 async function handleFeedback(req, res) {
+
+  const { reqname, reqrating, reqmessage } = req.body;
+
   try {
     await feedbacksModel.create({
-      name: req.body.name,
-      rating: req.body.rating,
-      message: req.body.feedback,
+      name: reqname,
+      rating: reqrating,
+      message: reqmessage,
     });
 
     return res.status(201).json({
       message: "Feedback submitted successfully",
     });
-
   } catch (error) {
     console.error("Feedback error:", error);
     return res.status(500).json({
