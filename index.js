@@ -1,4 +1,6 @@
-require("dotenv").config();
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config();
+}
 const express = require("express");
 const cors = require("cors");
 const rateLimit = require("express-rate-limit");
@@ -19,8 +21,6 @@ const contactLimiter = rateLimit({
   legacyHeaders: false,
 });
 
-app.use("/api/contact", contactLimiter);
-
 //connection DB
 (async () => {
   try {
@@ -31,6 +31,8 @@ app.use("/api/contact", contactLimiter);
     process.exit(1);
   }
 })();
+
+app.use("/api/contact", contactLimiter);
 
 // Route
 const routes = require("./Routes/UserRoutes");

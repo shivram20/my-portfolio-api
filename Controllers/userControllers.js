@@ -23,15 +23,15 @@ async function handleContact(req, res) {
         message: usermessage,
       })
     }catch(e){
-      console.log("Error During Save data in DB");
+      return res.status(500).json({message:"server [database] Error"});
     }
     
     //Send Mail 
     try{
       await sendMail({ username, useremail, usermessage });
-      res.status(201).json({ message: "success" });
+      res.status(200).json({ message: "Request send successfully" });
     }catch(e){
-      res.status(400).json({message:"success"});
+      res.status(500).json({message:"Server [email sending] Error"});
     }
   } catch (e) {
     res.status(500).json({message:"server error"});
