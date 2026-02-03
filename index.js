@@ -11,15 +11,12 @@ const port = process.env.PORT || 7800;
 
 app.use(cors());
 app.use(express.json());
-const contactLimiter = rateLimit({
+const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 5,
-  message: {
-    error: "Too many requests. Please try again later.",
-  },
-  standardHeaders: true,
-  legacyHeaders: false,
+  max: 100,
 });
+
+app.use(limiter);
 
 //connection DB
 (async () => {
@@ -31,8 +28,6 @@ const contactLimiter = rateLimit({
     process.exit(1);
   }
 })();
-
-app.use("/api/contact", contactLimiter);
 
 // Route
 const routes = require("./Routes/UserRoutes");
