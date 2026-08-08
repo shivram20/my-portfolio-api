@@ -8,7 +8,7 @@ const sendMail = async ({ username, useremail, usermessage }) => {
     auth: {
       user: process.env.EMAIL_USER,
       pass: process.env.EMAIL_PASS,
-    },
+    }
   });
 
   await transporter.sendMail({
@@ -22,7 +22,7 @@ const sendMail = async ({ username, useremail, usermessage }) => {
         <p><strong>Email:</strong> ${useremail}</p>
         <p><strong>Message:</strong></p>x
         <p>${usermessage}</p>
-    `,
+    `
   });
 };
 

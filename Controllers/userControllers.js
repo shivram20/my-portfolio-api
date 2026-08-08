@@ -4,7 +4,7 @@ const sendMail = require("./sendmail");
 
 //HandleGet Request
 async function handleAll(req, res) {
-  return res.status(200).send("Hello from server");
+  return res.status(200).send("Hello from server {My-Personal-Portfolio server}");
 }
 
 //HandleContact POST Request
@@ -34,6 +34,7 @@ async function handleContact(req, res) {
       useremail: email,
       usermessage: message,
     });
+    
   } catch (error) {
     console.error("Contact error:", error);
     return res.status(500).json({
@@ -45,13 +46,17 @@ async function handleContact(req, res) {
 //Handle POST Feedback Request
 async function handleFeedback(req, res) {
 
-  const { reqname, reqrating, reqmessage } = req.body;
+  const { name, rating, feedback } = req.body;
+
+  if (!name || !rating || !feedback) {
+    return res.status(400).json({ message: "All fields are required" });
+  }
 
   try {
     await feedbacksModel.create({
-      name: reqname,
-      rating: reqrating,
-      message: reqmessage,
+      name: name,
+      rating: rating,
+      message: feedback,
     });
 
     return res.status(201).json({

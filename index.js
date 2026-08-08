@@ -1,6 +1,7 @@
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config();
 }
+
 const express = require("express");
 const cors = require("cors");
 const rateLimit = require("express-rate-limit");
@@ -18,21 +19,17 @@ const limiter = rateLimit({
 
 app.use(limiter);
 
-//connection DB
-(async () => {
-  try {
-    await connectdb(process.env.MONGO_URI);
-    console.log("Connected to DB");
-  } catch (error) {
-    console.error("DB connection failed", error);
-    process.exit(1);
-  }
-})();
-
 // Route
 const routes = require("./Routes/UserRoutes");
 app.use("/api", routes);
 
-app.listen(port, () => {
+app.listen(port, async () => {
+  // DB Connection
+  try {
+    await connectdb(process.env.MONGO_URL);
+    console.log("DB Connected");
+  } catch (e) {
+    console.error("Error db connection");
+  }
   console.log(`server started at port ${port}`);
 });
