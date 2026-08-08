@@ -1,12 +1,12 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-const connectdb = (url) =>{
-    if(url == ""){
-        return 0;
-    }
-    mongoose.connect(url);
-}
+const connectdb = async (url) => {
+  if (!url) {
+    throw new Error("MONGO_DB URL IS NOT DEFINED");
+  }
+  await mongoose.connect(url);
+};
 
 module.exports = {
-    connectdb,
-}
+  connectdb,
+};

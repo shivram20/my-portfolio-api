@@ -26,10 +26,10 @@ app.use("/api", routes);
 app.listen(port, async () => {
   // DB Connection
   try {
-    await connectdb(process.env.MONGO_URL);
+    await connectdb(process.env.MONGO_URI);
     console.log("DB Connected");
   } catch (e) {
-    console.error("Error db connection");
+    console.error("Error during db connection");
   }
   console.log(`server started at port ${port}`);
 });
