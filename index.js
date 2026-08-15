@@ -19,11 +19,6 @@ const limiter = rateLimit({
 });
 
 app.use(limiter);
-
-// Route
-// app.get("/", (req,res) =>{
-//   res.status(200).send(`Hello from {My-personnal-portfolio server}`)
-// })
 app.use("/", routes);
 
 
