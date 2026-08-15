@@ -1,9 +1,5 @@
 const express = require("express");
-const {
-  handleAll,
-  handleContact,
-  handleFeedback,
-} = require("../Controllers/userControllers");
+const {handleAll, handleContact,handleFeedback,} = require("../Controllers/userControllers");
 
 const routes = express.Router();
 

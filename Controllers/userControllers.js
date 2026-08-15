@@ -1,10 +1,13 @@
 const db = require("../Models/userModel");
 const { contactsModel, feedbacksModel } = require("../Models/userModel");
-const sendMail = require("./sendmail");
+const RequestMail = require("./Mail/RequestMail");
+const ResponseMail = require("./Mail/ResponseMail");
 
 //HandleGet Request
 async function handleAll(req, res) {
-  return res.status(200).send("Hello from server {My-Personal-Portfolio server}");
+  return res
+    .status(200)
+    .send("Hello from server {My-Personal-Portfolio server}");
 }
 
 //HandleContact POST Request
@@ -17,24 +20,24 @@ async function handleContact(req, res) {
 
   try {
     //  Save to DB
-    await contactsModel.create({
+    const savedava = contactsModel.create({
       name,
       email,
       message,
     });
 
-    //  ONE response only
+    // send email
+    const sendemail = RequestMail({ name, email, message });
+
+    Promise.all([savedava, sendemail]).then(async (result) => {
+      let id = result[0]._id.toString();
+      if (id) {
+        await ResponseMail(email, name);
+      }
+    });
     return res.status(200).json({
       message: "Request sent successfully",
     });
-
-    // Send Email
-    await sendMail({
-      username: name,
-      useremail: email,
-      usermessage: message,
-    });
-    
   } catch (error) {
     console.error("Contact error:", error);
     return res.status(500).json({
@@ -45,7 +48,6 @@ async function handleContact(req, res) {
 
 //Handle POST Feedback Request
 async function handleFeedback(req, res) {
-
   const { name, rating, feedback } = req.body;
 
   if (!name || !rating || !feedback) {

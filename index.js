@@ -6,6 +6,7 @@ const express = require("express");
 const cors = require("cors");
 const rateLimit = require("express-rate-limit");
 const { connectdb } = require("./Models/connectdb");
+const routes = require("./Routes/UserRoutes");
 
 const app = express();
 const port = process.env.PORT || 7800;
@@ -20,8 +21,11 @@ const limiter = rateLimit({
 app.use(limiter);
 
 // Route
-const routes = require("./Routes/UserRoutes");
-app.use("/api", routes);
+// app.get("/", (req,res) =>{
+//   res.status(200).send(`Hello from {My-personnal-portfolio server}`)
+// })
+app.use("/", routes);
+
 
 app.listen(port, async () => {
   // DB Connection
