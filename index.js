@@ -22,7 +22,8 @@ app.use(limiter);
 app.use("/", routes);
 
 app.listen(port, async () => {
-  // DB Connection
+  // DB Connection call
+
   try {
     await connectdb(process.env.MONGO_URI);
     console.log("DB Connected");
