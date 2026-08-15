@@ -11,7 +11,6 @@ const routes = require("./Routes/UserRoutes");
 const app = express();
 const port = process.env.PORT || 7800;
 
-app.use(cors());
 app.use(express.json());
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
