@@ -11,6 +11,11 @@ const routes = require("./Routes/UserRoutes");
 const app = express();
 const port = process.env.PORT || 7800;
 
+app.use(
+  cors({
+    origin: "https://shivram20.github.io/my-portfolio-shiv/",
+  }),
+);
 app.use(express.json());
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -18,13 +23,7 @@ const limiter = rateLimit({
 });
 
 app.use(limiter);
-
-// Route
-// app.get("/", (req,res) =>{
-//   res.status(200).send(`Hello from {My-personnal-portfolio server}`)
-// })
 app.use("/", routes);
-
 
 app.listen(port, async () => {
   // DB Connection
