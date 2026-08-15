@@ -1,7 +1,7 @@
 const transporter = require("./Transporter");
 
 const RequestMail = async ({ name, email, message }) => {
-  const Transporter = await transporter();
+  const Transporter = transporter();
 
   // Request email
   let info = await Transporter.sendMail({

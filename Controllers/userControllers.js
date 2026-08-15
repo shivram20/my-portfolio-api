@@ -28,21 +28,27 @@ async function handleContact(req, res) {
       message,
     });
 
+    const Transporter = transporter();
+
+    await Transporter.verify();
+    console.log("SMTP connection successful");
     // Send contact request email
-    await RequestMail({
-      name,
-      email,
-      message,
-    });
+    // await RequestMail({
+    //   name,
+    //   email,
+    //   message,
+    // });
 
     // Send response email to user
-    await ResponseMail(email, name);
+    // await ResponseMail(email, name);
 
-    return res.status(200).json({message: "Request sent successfully"});
+    return res.status(200).json({ message: "Request sent successfully" });
   } catch (error) {
     console.error("Contact error:", error);
 
-    return res.status(500).json({message: "Server error. Please try again later",});
+    return res
+      .status(500)
+      .json({ message: "Server error. Please try again later" });
   }
 }
 
