@@ -9,8 +9,6 @@ async function handleAll(req, res) {
     .status(200)
     .send("Hello from server {My-Personal-Portfolio server}");
 }
-
-// Handle Contact POST Request
 async function handleContact(req, res) {
   const { name, email, message } = req.body;
 
@@ -21,34 +19,31 @@ async function handleContact(req, res) {
   }
 
   try {
-    // Save contact to DB
-    const savedData = await contactsModel.create({
+    // Save to database
+    await contactsModel.create({
       name,
       email,
       message,
     });
 
-    const Transporter = transporter();
+    // Respond immediately
+    res.status(200).json({
+      message: "Request sent successfully",
+    });
 
-    await Transporter.verify();
-    console.log("SMTP connection successful");
-    // Send contact request email
-    // await RequestMail({
-    //   name,
-    //   email,
-    //   message,
-    // });
-
-    // Send response email to user
-    // await ResponseMail(email, name);
-
-    return res.status(200).json({ message: "Request sent successfully" });
+    // Send emails in background
+    Promise.all([
+      RequestMail({ name, email, message }),
+      ResponseMail(email, name),
+    ]).catch((error) => {
+      console.error("Email sending error:", error);
+    });
   } catch (error) {
     console.error("Contact error:", error);
 
-    return res
-      .status(500)
-      .json({ message: "Server error. Please try again later" });
+    return res.status(500).json({
+      message: "Server error. Please try again later",
+    });
   }
 }
 
