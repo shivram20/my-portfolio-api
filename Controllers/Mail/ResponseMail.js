@@ -11,7 +11,7 @@ async function ResponseMail(email,name) {
     html : `
         <h2> Hy ${name}</h2>
         <p> Thank you for the update. I have received the information.</p>
-        <h3>Thanks</h3>
+        <h5>Thanks</h5>
     `
   });
 }

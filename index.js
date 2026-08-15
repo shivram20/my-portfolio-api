@@ -35,5 +35,3 @@ app.listen(port, async () => {
   }
   console.log(`server started at port ${port}`);
 });
-
-// # MONGO_URI=mongodb://localhost:27017/My-Portfolio-DB
