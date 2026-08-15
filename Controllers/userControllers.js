@@ -23,17 +23,12 @@ async function handleContact(req, res) {
       message,
     });
 
-    //  ONE response only
     return res.status(200).json({
       message: "Request sent successfully",
     });
 
-    // Send Email
-    await sendMail({
-      username: name,
-      useremail: email,
-      usermessage: message,
-    });
+    // Send mail
+  
     
   } catch (error) {
     console.error("Contact error:", error);
