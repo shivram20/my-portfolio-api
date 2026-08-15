@@ -7,8 +7,6 @@ const cors = require("cors");
 const rateLimit = require("express-rate-limit");
 const { connectdb } = require("./Models/connectdb");
 const routes = require("./Routes/UserRoutes");
-const transporter = require("./Controllers/Mail/Transporter");
-const Transporter = require("./Controllers/Mail/Transporter");
 
 const app = express();
 const port = process.env.PORT || 7800;
@@ -24,9 +22,11 @@ app.use(limiter);
 app.use("/", routes);
 
 // DB COnnection
-async () => {
-  await connectdb(process.env.MONGO_URL);
-};
+connectdb(process.env.MONGO_URL)
+  .then(() => {
+    console.log("connect to db");
+  })
+  .catch(() => console.log("error during db con"));
 
 app.listen(port, () => {
   console.log(`server started at port ${port}`);
